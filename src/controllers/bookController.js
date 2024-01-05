@@ -1,4 +1,5 @@
 const BookService = require("../services/bookService");
+const UserService = require("../services/userService");
 const { sendResponse, sendResponseAsError, sendResponseMassage } = require("../utils/utils");
 
 class BookController {
@@ -16,6 +17,12 @@ class BookController {
     static async addBook(req, res) {
         try {
             const book = req.body
+            const userRowPacket = await UserService.getUserByKey(`user_id`, book.user_id);
+            const user = JSON.parse(JSON.stringify(userRowPacket))[0];
+            console.log(user);
+            const name = user.user_name;
+            console.log("11111>>>>" + name);
+            book.user_name = name;
             const resultBook = await BookService.addBook(book);
             sendResponse(res, resultBook);
         } catch (err) {
@@ -34,9 +41,29 @@ class BookController {
 
     static async getBookById(req, res) {
         try {
-            const book = await BookService.getBookByKey("book_id", req.params.book_id);
-            sendResponse(res, book);
+            const book_id = req.body.book_id
+            const user_id = req.body.user_id
+            if (book_id) {
+                const book = await BookService.getBookByKey("book_id", book_id);
+                sendResponse(res, book);
+            } else {
+                const book = await BookService.getBookByKey("user_id", user_id);
+                sendResponse(res, book);
+            }
         } catch (err) {
+            sendResponseAsError(res, err);
+        }
+    }
+    
+    static async getBookByDate(req, res) {
+        try {
+            const from_date = req.body.from_date;
+            const to_date = req.body.to_date;
+            const books = await BookService.getBooksByDate(from_date,to_date);
+            sendResponse(res, books);
+            console.log(books);
+        } catch (err) {
+            console.log(err);
             sendResponseAsError(res, err);
         }
     }

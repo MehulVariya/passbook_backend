@@ -9,12 +9,12 @@ class Book {
 
     static async addBook(book) {
         console.log(book);
-        const {  user_id, type,amount, book_desc } = book;
+        const { user_id,user_name, type, amount, book_desc } = book;
         if (user_id && type && amount && book_desc) {
             const today = new Date();
             console.log("Created date : " + today);
-            const query = "insert into tbl_book ( user_id, type, amount, book_desc, create_dt) values(?,?,?,?,?)";
-            const fields = [user_id, type,amount, book_desc,today];
+            const query = "insert into tbl_book ( user_id,user_name, type, amount, book_desc, create_dt) values(?,?,?,?,?,?)";
+            const fields = [user_id, user_name, type, amount, book_desc, today];
             console.log(fields);
             return executeQuery(conn, query, fields);
         } else {
@@ -22,14 +22,19 @@ class Book {
         }
     }
 
-    static removeBookById(doctorId) {
-         const query = "delete from tbl_book where book_id = ?";
-         return executeQuery(conn, query, doctorId);
+    static removeBookById(bookId) {
+        const query = "delete from tbl_book where book_id = ?";
+        return executeQuery(conn, query, bookId);
     }
 
-    static getBookByKey(key,value){
+    static getBookByKey(key, value) {
         const query = `select * from tbl_book where ${key} = ?`;
         return executeQuery(conn, query, [value]);
+    }
+    
+    static getBooksByDate(from_date, to_date) {
+        const query = `select * from tbl_book where create_dt BETWEEN ? AND ?`;
+        return executeQuery(conn, query, [from_date,to_date]);
     }
 
     static updateBook(book) {

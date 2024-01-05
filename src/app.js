@@ -1,8 +1,9 @@
 const express = require("express");
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 const app = new express();
 const cors = require('cors');
 const bookRoute = require("../src/routes/bookRoute");
+const userRoute = require("../src/routes/userRoute");
 
 const port = process.env.port || 8000;
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 
 app.use(bookRoute);
+app.use(userRoute);
 
 app.listen(port, () => {
     console.log(`server listner port : ${port}`);

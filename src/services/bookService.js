@@ -15,6 +15,9 @@ class BookService {
     static getBookByKey(key,value) {
         return Book.getBookByKey(key,value);
     }
+    static getBooksByDate(from_date, to_date) {
+        return Book.getBooksByDate(from_date, to_date);
+    }
     static updateBook(book) {
         return Book.updateBook(book);
     }
