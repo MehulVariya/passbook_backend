@@ -16,7 +16,9 @@ class Book {
             const query = "insert into tbl_book ( user_id,user_name, type, amount, book_desc, create_dt) values(?,?,?,?,?,?)";
             const fields = [user_id, user_name, type, amount, book_desc, today];
             console.log(fields);
-            return executeQuery(conn, query, fields);
+            const result = await executeQuery(conn, query, fields);
+            const bookId = JSON.parse(JSON.stringify(result)).insertId;
+            return this.getBookByKey("book_id",bookId)
         } else {
             throw "fields are empty not allows";
         }

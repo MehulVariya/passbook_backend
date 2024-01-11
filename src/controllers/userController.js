@@ -48,7 +48,10 @@ class UserController {
         try {
             const user = req.body
             const resultUser = await UserService.addUser(user);
-            sendResponse(res, resultUser);
+            const userID = JSON.parse(JSON.stringify(resultUser)).insertId;
+            console.log("user_id : "+userID);
+            const resultUserJson = {user_id:userID,user_name:user.name,email_id:user.email_id,password:user.password}
+            sendResponse(res, resultUserJson);
         } catch (err) {
             sendResponseAsError(res, err);
         }
