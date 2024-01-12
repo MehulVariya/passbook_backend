@@ -27,7 +27,7 @@ class UserController {
                     console.log(user);
                     const ischeck = password == user.password
                     if (ischeck) {
-                        sendResponse(res, { user_id: user.user_id, user_name: user.user_name, email_id: email_id });
+                        sendResponse(res, [{ user_id: user.user_id, user_name: user.user_name, email_id: email_id }]);
                     }
                     else {
                         sendResponseAsError(res, "Invalid Password!")
@@ -49,8 +49,8 @@ class UserController {
             const user = req.body
             const resultUser = await UserService.addUser(user);
             const userID = JSON.parse(JSON.stringify(resultUser)).insertId;
-            console.log("user_id : "+userID);
-            const resultUserJson = {user_id:userID,user_name:user.name,email_id:user.email_id,password:user.password}
+            console.log("user_id : " + userID);
+            const resultUserJson = { user_id: userID, user_name: user.name, email_id: user.email_id, password: user.password }
             sendResponse(res, resultUserJson);
         } catch (err) {
             sendResponseAsError(res, err);
