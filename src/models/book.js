@@ -34,6 +34,11 @@ class Book {
         return executeQuery(conn, query, [value]);
     }
 
+    static getBooksByUserID(user_id){
+        const query = `select * from tbl_book where record_type = "Company" AND user_id = ${user_id}`;
+        return executeQuery(conn, query, []);
+    }
+
     static getBooksByDate(from_date, to_date, user_id) {
         const query = `select * from tbl_book where create_dt BETWEEN ? AND ? AND ( user_id = ${user_id} or receiver_id = ${user_id} or record_type = "Company" )`;
         return executeQuery(conn, query, [from_date, to_date]);

@@ -44,12 +44,12 @@ class BookController {
     static async getBookById(req, res) {
         try {
             const book_id = req.body.book_id
-            const user_id = req.body.user_id
             if (book_id) {
                 const book = await BookService.getBookByKey("book_id", book_id);
                 sendResponse(res, book);
             } else {
-                const book = await BookService.getBookByKey("user_id", user_id);
+                const user_id = req.body.user_id
+                const book = await BookService.getBooksByUserID(user_id);
                 sendResponse(res, book);
             }
         } catch (err) {

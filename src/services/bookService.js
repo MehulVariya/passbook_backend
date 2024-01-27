@@ -18,6 +18,9 @@ class BookService {
     static getBooksByDate(from_date, to_date,user_id) {
         return Book.getBooksByDate(from_date, to_date,user_id);
     }
+    static getBooksByUserID(user_id) {
+        return Book.getBooksByUserID(user_id);
+    }
     static getBooksByRecordType(user_id,receiver_id) {
         return Book.getBooksByRecordType(user_id,receiver_id);
     }
