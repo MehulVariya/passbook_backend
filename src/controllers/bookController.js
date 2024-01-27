@@ -5,7 +5,9 @@ const { sendResponse, sendResponseAsError, sendResponseMassage } = require("../u
 class BookController {
     static async getBooksList(req, res) {
         try {
-            const books = await BookService.getBooksList();
+            const user_id = req.query.user_id;
+            console.log(user_id);
+            const books = await BookService.getBooksList(user_id);
             sendResponse(res, books);
             console.log(books);
         } catch (err) {
@@ -54,12 +56,13 @@ class BookController {
             sendResponseAsError(res, err);
         }
     }
-    
+
     static async getBookByDate(req, res) {
         try {
             const from_date = req.body.from_date;
             const to_date = req.body.to_date;
-            const books = await BookService.getBooksByDate(from_date,to_date);
+            const user_id = req.body.user_id;
+            const books = await BookService.getBooksByDate(from_date, to_date,user_id);
             sendResponse(res, books);
             console.log(books);
         } catch (err) {
@@ -67,6 +70,20 @@ class BookController {
             sendResponseAsError(res, err);
         }
     }
+
+    static async getBookByRecordType(req, res) {
+        try {
+            const user_id = req.body.user_id;
+            const receiver_id = req.body.receiver_id;
+            const books = await BookService.getBooksByRecordType(user_id,receiver_id);
+            sendResponse(res, books);
+            console.log(books);
+        } catch (err) {
+            console.log(err);
+            sendResponseAsError(res, err);
+        }
+    }
+    
     static async updateBook(req, res) {
         try {
             const response = await BookService.updateBook(req.body);
