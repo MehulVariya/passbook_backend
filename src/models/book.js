@@ -25,8 +25,8 @@ class Book {
     }
 
     static removeBookById(bookId) {
-        const query = "delete from tbl_book where book_id = ?";
-        return executeQuery(conn, query, bookId);
+        const query = `delete from tbl_book where book_id = ${bookId}`;
+        return executeQuery(conn, query, []);
     }
 
     static getBookByKey(key, value) {
@@ -34,24 +34,35 @@ class Book {
         return executeQuery(conn, query, [value]);
     }
 
-    static getBooksByUserID(user_id){
+    static getBooksByUserID(user_id) {
         const query = `select * from tbl_book where record_type = "Company" AND user_id = ${user_id}`;
         return executeQuery(conn, query, []);
     }
 
     static getBooksByDate(from_date, to_date, user_id) {
-        const query = `select * from tbl_book where create_dt BETWEEN ? AND ? AND ( user_id = ${user_id} or receiver_id = ${user_id} or record_type = "Company" )`;
-        return executeQuery(conn, query, [from_date, to_date]);
+        const query = `select * from tbl_book where (create_dt >= '${from_date}' AND create_dt <= '${to_date}') AND ( user_id = ${user_id} or receiver_id = ${user_id} or record_type = "Company" )`;
+        console.log(query);
+        return executeQuery(conn, query, []);
     }
 
-    static getBooksByRecordType(user_id,receiver_id) {
+    static getBooksByRecordType(user_id, receiver_id) {
         const query = `select * from tbl_book where (user_id = ${user_id} AND receiver_id =${receiver_id}) OR  (user_id = ${receiver_id} AND receiver_id =${user_id})`;
         return executeQuery(conn, query, []);
     }
 
     static updateBook(book) {
-        const query = "update tbl_book set ? where book_id = ?";
-        return executeQuery(conn, query, [book, book.book_id]);
+        const type = book.type;
+        const amount = book.amount;
+        const book_desc = book.book_desc
+        const id = book.book_id;
+        if (type && amount && book_desc && id) {
+            const query = `UPDATE tbl_book SET type='${type}',amount=${amount},book_desc='${book_desc}' WHERE book_id = ${id}`;
+            console.log(query);
+            return executeQuery(conn, query, []);
+        } else {
+            throw "Complate required field"
+        }
+
     }
 }
 

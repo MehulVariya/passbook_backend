@@ -18,16 +18,18 @@ const sendResponseAsError = (res, err) => {
 
 function executeQuery(conn, query, fields) {
     return new Promise((resolve, reject) => {
-        conn.query(query, fields, (err, result) => {
-            if (err) {
-                reject(err.message);
-                return;
+        conn.execute(query, fields).then(
+            ([result]) => {
+                console.log(result);
+                if (result.affectedRows == 0 || result.length == 0) {
+                    reject("Id not found");
+                    return;
+                }
+                resolve(result);
             }
-            if (result.affectedRows == 0 || result.length == 0) {
-                reject("Id not found");
-                return;
-            }
-            resolve(result);
+        ).catch(err =>  {
+            console.log(err);
+            reject("Id not found");
         });
     });
 }
